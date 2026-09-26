@@ -1,0 +1,92 @@
+package com.healthos.app.presentation.profile
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.healthos.app.domain.model.PersonalGoal
+
+@Composable
+fun OnboardingScreen(
+    modifier: Modifier = Modifier,
+    viewModel: OnboardingViewModel = hiltViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(24.dp)
+            .testTag("screen_onboarding"),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(text = "Vamos conhecer você", style = MaterialTheme.typography.headlineSmall)
+
+        OutlinedTextField(
+            value = uiState.name,
+            onValueChange = viewModel::onNameChange,
+            label = { Text("Nome") },
+            modifier = Modifier.fillMaxWidth().testTag("input_name"),
+        )
+        OutlinedTextField(
+            value = uiState.birthDate,
+            onValueChange = viewModel::onBirthDateChange,
+            label = { Text("Data de nascimento (AAAA-MM-DD)") },
+            modifier = Modifier.fillMaxWidth().testTag("input_birthdate"),
+        )
+        OutlinedTextField(
+            value = uiState.heightCm,
+            onValueChange = viewModel::onHeightChange,
+            label = { Text("Altura (cm)") },
+            modifier = Modifier.fillMaxWidth().testTag("input_height"),
+        )
+        OutlinedTextField(
+            value = uiState.initialWeight,
+            onValueChange = viewModel::onInitialWeightChange,
+            label = { Text("Peso atual (kg)") },
+            modifier = Modifier.fillMaxWidth().testTag("input_weight"),
+        )
+
+        Text(text = "Objetivo", style = MaterialTheme.typography.titleMedium)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            PersonalGoal.entries.forEach { goal ->
+                FilterChip(
+                    selected = uiState.goal == goal,
+                    onClick = { viewModel.onGoalChange(goal) },
+                    label = { Text(goal.displayLabel()) },
+                    modifier = Modifier.testTag("goal_${goal.name}"),
+                )
+            }
+        }
+
+        uiState.errorMessage?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.testTag("text_error"),
+            )
+        }
+
+        Button(
+            onClick = viewModel::submit,
+            enabled = !uiState.isSaving,
+            modifier = Modifier.testTag("button_submit"),
+        ) {
+            Text("Concluir")
+        }
+    }
+}

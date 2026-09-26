@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Health OS</string>
+    <string name="nav_today">Hoje</string>
+    <string name="nav_workouts">Treinos</string>
+    <string name="nav_evolution">Evolução</string>
+    <string name="nav_profile">Perfil</string>
+    <string name="coming_soon">Em breve</string>
+</resources>

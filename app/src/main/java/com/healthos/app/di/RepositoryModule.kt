@@ -3,12 +3,14 @@ package com.healthos.app.di
 import com.healthos.app.data.preferences.UserPreferencesDataSource
 import com.healthos.app.data.repository.GoalRepositoryImpl
 import com.healthos.app.data.repository.HabitRepositoryImpl
+import com.healthos.app.data.repository.HealthConnectRepositoryImpl
 import com.healthos.app.data.repository.MeasurementRepositoryImpl
 import com.healthos.app.data.repository.UserRepositoryImpl
 import com.healthos.app.data.repository.WeightRepositoryImpl
 import com.healthos.app.data.repository.WorkoutRepositoryImpl
 import com.healthos.app.domain.repository.GoalRepository
 import com.healthos.app.domain.repository.HabitRepository
+import com.healthos.app.domain.repository.HealthConnectRepository
 import com.healthos.app.domain.repository.MeasurementRepository
 import com.healthos.app.domain.repository.PreferencesRepository
 import com.healthos.app.domain.repository.UserRepository
@@ -51,4 +53,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindGoalRepository(impl: GoalRepositoryImpl): GoalRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHealthConnectRepository(impl: HealthConnectRepositoryImpl): HealthConnectRepository
 }

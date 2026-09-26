@@ -10,12 +10,12 @@ plugins {
 
 android {
     namespace = "com.healthos.app"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.healthos.app"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "0.1.0"
 
@@ -87,6 +87,8 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.datastore.preferences)
+
+    implementation(libs.health.connect.client)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

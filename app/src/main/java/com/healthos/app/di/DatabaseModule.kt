@@ -5,6 +5,10 @@ import androidx.room.Room
 import com.healthos.app.data.local.AppDatabase
 import com.healthos.app.data.local.dao.ExerciseDao
 import com.healthos.app.data.local.dao.ExerciseSetDao
+import com.healthos.app.data.local.dao.GoalCheckInDao
+import com.healthos.app.data.local.dao.GoalDao
+import com.healthos.app.data.local.dao.HabitDao
+import com.healthos.app.data.local.dao.HabitEntryDao
 import com.healthos.app.data.local.dao.MeasurementDao
 import com.healthos.app.data.local.dao.UserDao
 import com.healthos.app.data.local.dao.WeightDao
@@ -45,4 +49,16 @@ object DatabaseModule {
 
     @Provides
     fun provideExerciseSetDao(database: AppDatabase): ExerciseSetDao = database.exerciseSetDao()
+
+    @Provides
+    fun provideHabitDao(database: AppDatabase): HabitDao = database.habitDao()
+
+    @Provides
+    fun provideHabitEntryDao(database: AppDatabase): HabitEntryDao = database.habitEntryDao()
+
+    @Provides
+    fun provideGoalDao(database: AppDatabase): GoalDao = database.goalDao()
+
+    @Provides
+    fun provideGoalCheckInDao(database: AppDatabase): GoalCheckInDao = database.goalCheckInDao()
 }

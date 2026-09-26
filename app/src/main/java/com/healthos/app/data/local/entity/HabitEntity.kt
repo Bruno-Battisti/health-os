@@ -1,0 +1,27 @@
+package com.healthos.app.data.local.entity
+
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
+
+@Entity(
+    tableName = "habits",
+    foreignKeys = [
+        ForeignKey(
+            entity = UserEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["userId"],
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
+    indices = [Index("userId")],
+)
+data class HabitEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val userId: Long,
+    val name: String,
+    val targetValue: Float,
+    val unit: String,
+)

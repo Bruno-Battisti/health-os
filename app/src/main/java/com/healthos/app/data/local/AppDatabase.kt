@@ -4,12 +4,20 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.healthos.app.data.local.dao.ExerciseDao
 import com.healthos.app.data.local.dao.ExerciseSetDao
+import com.healthos.app.data.local.dao.GoalCheckInDao
+import com.healthos.app.data.local.dao.GoalDao
+import com.healthos.app.data.local.dao.HabitDao
+import com.healthos.app.data.local.dao.HabitEntryDao
 import com.healthos.app.data.local.dao.MeasurementDao
 import com.healthos.app.data.local.dao.UserDao
 import com.healthos.app.data.local.dao.WeightDao
 import com.healthos.app.data.local.dao.WorkoutDao
 import com.healthos.app.data.local.entity.ExerciseEntity
 import com.healthos.app.data.local.entity.ExerciseSetEntity
+import com.healthos.app.data.local.entity.GoalCheckInEntity
+import com.healthos.app.data.local.entity.GoalEntity
+import com.healthos.app.data.local.entity.HabitEntity
+import com.healthos.app.data.local.entity.HabitEntryEntity
 import com.healthos.app.data.local.entity.MeasurementEntity
 import com.healthos.app.data.local.entity.UserEntity
 import com.healthos.app.data.local.entity.WeightEntryEntity
@@ -23,8 +31,12 @@ import com.healthos.app.data.local.entity.WorkoutEntity
         WorkoutEntity::class,
         ExerciseEntity::class,
         ExerciseSetEntity::class,
+        HabitEntity::class,
+        HabitEntryEntity::class,
+        GoalEntity::class,
+        GoalCheckInEntity::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -34,4 +46,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun workoutDao(): WorkoutDao
     abstract fun exerciseDao(): ExerciseDao
     abstract fun exerciseSetDao(): ExerciseSetDao
+    abstract fun habitDao(): HabitDao
+    abstract fun habitEntryDao(): HabitEntryDao
+    abstract fun goalDao(): GoalDao
+    abstract fun goalCheckInDao(): GoalCheckInDao
 }

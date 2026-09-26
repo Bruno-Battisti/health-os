@@ -1,8 +1,10 @@
 package com.healthos.app.di
 
 import com.healthos.app.data.preferences.UserPreferencesDataSource
+import com.healthos.app.data.repository.MeasurementRepositoryImpl
 import com.healthos.app.data.repository.UserRepositoryImpl
 import com.healthos.app.data.repository.WeightRepositoryImpl
+import com.healthos.app.domain.repository.MeasurementRepository
 import com.healthos.app.domain.repository.PreferencesRepository
 import com.healthos.app.domain.repository.UserRepository
 import com.healthos.app.domain.repository.WeightRepository
@@ -27,4 +29,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindPreferencesRepository(impl: UserPreferencesDataSource): PreferencesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMeasurementRepository(impl: MeasurementRepositoryImpl): MeasurementRepository
 }

@@ -55,4 +55,34 @@ class WeightRepositoryImplTest {
         assertEquals(79f, latest?.weight)
         assertEquals(LocalDate.of(2026, 1, 8), latest?.date)
     }
+
+    @Test
+    fun `observeHistory returns all entries ordered by date descending`() = runTest {
+        repository.addEntry(WeightEntry(userId = userId, weight = 80f, date = LocalDate.of(2026, 1, 1)))
+        repository.addEntry(WeightEntry(userId = userId, weight = 79f, date = LocalDate.of(2026, 1, 8)))
+
+        val history = repository.observeHistory(userId).first()
+
+        assertEquals(listOf(79f, 80f), history.map { it.weight })
+    }
+
+    @Test
+    fun `updateEntry changes the stored value for that id`() = runTest {
+        repository.addEntry(WeightEntry(userId = userId, weight = 80f, date = LocalDate.of(2026, 1, 1)))
+        val saved = repository.observeHistory(userId).first().first()
+
+        repository.updateEntry(saved.copy(weight = 78f))
+
+        assertEquals(78f, repository.observeHistory(userId).first().first().weight)
+    }
+
+    @Test
+    fun `deleteEntry removes it from the history`() = runTest {
+        repository.addEntry(WeightEntry(userId = userId, weight = 80f, date = LocalDate.of(2026, 1, 1)))
+        val saved = repository.observeHistory(userId).first().first()
+
+        repository.deleteEntry(saved.id)
+
+        assertEquals(emptyList<WeightEntry>(), repository.observeHistory(userId).first())
+    }
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun DashboardScreen(
+    onNavigateToWeight: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
@@ -37,6 +39,12 @@ fun DashboardScreen(
             }
             uiState.currentWeight?.let { weight ->
                 Text(text = "Peso atual: $weight kg", modifier = Modifier.testTag("text_current_weight"))
+            }
+            uiState.weightDelta7Days?.let { delta ->
+                Text(text = "Variação em 7 dias: %+.1f kg".format(delta), modifier = Modifier.testTag("text_weight_delta"))
+            }
+            OutlinedButton(onClick = onNavigateToWeight, modifier = Modifier.testTag("button_quick_add_weight")) {
+                Text("Registrar peso")
             }
         }
     }

@@ -6,6 +6,7 @@ import com.healthos.app.domain.model.User
 import com.healthos.app.domain.model.WeightEntry
 import com.healthos.app.domain.usecase.GetLatestWeightUseCase
 import com.healthos.app.domain.usecase.GetUserProfileUseCase
+import com.healthos.app.domain.usecase.GetWeightTrendUseCase
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -29,12 +30,14 @@ class DashboardViewModelTest {
     private val weightFlow = MutableStateFlow<WeightEntry?>(null)
     private val getUserProfileUseCase = mockk<GetUserProfileUseCase>()
     private val getLatestWeightUseCase = mockk<GetLatestWeightUseCase>()
+    private val getWeightTrendUseCase = mockk<GetWeightTrendUseCase>()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         every { getUserProfileUseCase() } returns userFlow
         every { getLatestWeightUseCase(User.SINGLE_USER_ID) } returns weightFlow
+        every { getWeightTrendUseCase(User.SINGLE_USER_ID, any()) } returns MutableStateFlow(null)
     }
 
     @After
@@ -45,7 +48,7 @@ class DashboardViewModelTest {
     @Test
     fun `dashboard reflects the latest weight after registering 79kg over an initial 80kg`() = runTest {
         val birthDate = LocalDate.now().minusYears(30)
-        val viewModel = DashboardViewModel(getUserProfileUseCase, getLatestWeightUseCase)
+        val viewModel = DashboardViewModel(getUserProfileUseCase, getLatestWeightUseCase, getWeightTrendUseCase)
 
         userFlow.value = User(name = "Ana", birthDate = birthDate, heightCm = 165f, createdAt = Instant.now())
         weightFlow.value = WeightEntry(userId = User.SINGLE_USER_ID, weight = 80f, date = LocalDate.now())

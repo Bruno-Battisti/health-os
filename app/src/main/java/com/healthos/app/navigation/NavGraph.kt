@@ -25,7 +25,12 @@ import com.healthos.app.presentation.dashboard.DashboardScreen
 import com.healthos.app.presentation.evolution.EvolutionScreen
 import com.healthos.app.presentation.profile.OnboardingScreen
 import com.healthos.app.presentation.profile.ProfileScreen
+import com.healthos.app.presentation.weight.MeasurementScreen
+import com.healthos.app.presentation.weight.WeightScreen
 import com.healthos.app.presentation.workout.WorkoutScreen
+
+private const val ROUTE_WEIGHT = "weight"
+private const val ROUTE_MEASUREMENTS = "measurements"
 
 @Composable
 fun HealthOsNavGraph(rootViewModel: RootViewModel = hiltViewModel()) {
@@ -74,10 +79,16 @@ private fun MainNavGraph() {
             startDestination = BottomNavItem.Today.route,
             modifier = Modifier.padding(innerPadding),
         ) {
-            composable(BottomNavItem.Today.route) { DashboardScreen() }
+            composable(BottomNavItem.Today.route) {
+                DashboardScreen(onNavigateToWeight = { navController.navigate(ROUTE_WEIGHT) })
+            }
             composable(BottomNavItem.Workouts.route) { WorkoutScreen() }
             composable(BottomNavItem.Evolution.route) { EvolutionScreen() }
             composable(BottomNavItem.Profile.route) { ProfileScreen() }
+            composable(ROUTE_WEIGHT) {
+                WeightScreen(onNavigateToMeasurements = { navController.navigate(ROUTE_MEASUREMENTS) })
+            }
+            composable(ROUTE_MEASUREMENTS) { MeasurementScreen() }
         }
     }
 }

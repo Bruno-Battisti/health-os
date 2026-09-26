@@ -4,10 +4,12 @@ import com.healthos.app.data.preferences.UserPreferencesDataSource
 import com.healthos.app.data.repository.MeasurementRepositoryImpl
 import com.healthos.app.data.repository.UserRepositoryImpl
 import com.healthos.app.data.repository.WeightRepositoryImpl
+import com.healthos.app.data.repository.WorkoutRepositoryImpl
 import com.healthos.app.domain.repository.MeasurementRepository
 import com.healthos.app.domain.repository.PreferencesRepository
 import com.healthos.app.domain.repository.UserRepository
 import com.healthos.app.domain.repository.WeightRepository
+import com.healthos.app.domain.repository.WorkoutRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -33,4 +35,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindMeasurementRepository(impl: MeasurementRepositoryImpl): MeasurementRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindWorkoutRepository(impl: WorkoutRepositoryImpl): WorkoutRepository
 }

@@ -3,9 +3,12 @@ package com.healthos.app.di
 import android.content.Context
 import androidx.room.Room
 import com.healthos.app.data.local.AppDatabase
+import com.healthos.app.data.local.dao.ExerciseDao
+import com.healthos.app.data.local.dao.ExerciseSetDao
 import com.healthos.app.data.local.dao.MeasurementDao
 import com.healthos.app.data.local.dao.UserDao
 import com.healthos.app.data.local.dao.WeightDao
+import com.healthos.app.data.local.dao.WorkoutDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,4 +36,13 @@ object DatabaseModule {
 
     @Provides
     fun provideMeasurementDao(database: AppDatabase): MeasurementDao = database.measurementDao()
+
+    @Provides
+    fun provideWorkoutDao(database: AppDatabase): WorkoutDao = database.workoutDao()
+
+    @Provides
+    fun provideExerciseDao(database: AppDatabase): ExerciseDao = database.exerciseDao()
+
+    @Provides
+    fun provideExerciseSetDao(database: AppDatabase): ExerciseSetDao = database.exerciseSetDao()
 }

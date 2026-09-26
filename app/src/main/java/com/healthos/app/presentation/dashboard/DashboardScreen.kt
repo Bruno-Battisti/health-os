@@ -18,6 +18,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun DashboardScreen(
     onNavigateToWeight: () -> Unit,
+    onNavigateToHabits: () -> Unit,
+    onNavigateToGoals: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
@@ -43,8 +45,20 @@ fun DashboardScreen(
             uiState.weightDelta7Days?.let { delta ->
                 Text(text = "Variação em 7 dias: %+.1f kg".format(delta), modifier = Modifier.testTag("text_weight_delta"))
             }
+            if (uiState.waterTarget != null) {
+                Text(
+                    text = "Água hoje: ${uiState.waterToday ?: 0f}/${uiState.waterTarget} L",
+                    modifier = Modifier.testTag("text_water_today"),
+                )
+            }
             OutlinedButton(onClick = onNavigateToWeight, modifier = Modifier.testTag("button_quick_add_weight")) {
                 Text("Registrar peso")
+            }
+            OutlinedButton(onClick = onNavigateToHabits, modifier = Modifier.testTag("button_open_habits")) {
+                Text("Hábitos")
+            }
+            OutlinedButton(onClick = onNavigateToGoals, modifier = Modifier.testTag("button_open_goals")) {
+                Text("Metas")
             }
         }
     }

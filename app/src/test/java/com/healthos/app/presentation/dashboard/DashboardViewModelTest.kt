@@ -4,6 +4,8 @@ package com.healthos.app.presentation.dashboard
 
 import com.healthos.app.domain.model.User
 import com.healthos.app.domain.model.WeightEntry
+import com.healthos.app.domain.usecase.GetHabitProgressUseCase
+import com.healthos.app.domain.usecase.GetHabitsUseCase
 import com.healthos.app.domain.usecase.GetLatestWeightUseCase
 import com.healthos.app.domain.usecase.GetUserProfileUseCase
 import com.healthos.app.domain.usecase.GetWeightTrendUseCase
@@ -12,6 +14,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -31,6 +34,8 @@ class DashboardViewModelTest {
     private val getUserProfileUseCase = mockk<GetUserProfileUseCase>()
     private val getLatestWeightUseCase = mockk<GetLatestWeightUseCase>()
     private val getWeightTrendUseCase = mockk<GetWeightTrendUseCase>()
+    private val getHabitsUseCase = mockk<GetHabitsUseCase>()
+    private val getHabitProgressUseCase = mockk<GetHabitProgressUseCase>()
 
     @Before
     fun setUp() {
@@ -38,6 +43,7 @@ class DashboardViewModelTest {
         every { getUserProfileUseCase() } returns userFlow
         every { getLatestWeightUseCase(User.SINGLE_USER_ID) } returns weightFlow
         every { getWeightTrendUseCase(User.SINGLE_USER_ID, any()) } returns MutableStateFlow(null)
+        every { getHabitsUseCase(User.SINGLE_USER_ID) } returns flowOf(emptyList())
     }
 
     @After
@@ -45,10 +51,14 @@ class DashboardViewModelTest {
         Dispatchers.resetMain()
     }
 
+    private fun buildViewModel() = DashboardViewModel(
+        getUserProfileUseCase, getLatestWeightUseCase, getWeightTrendUseCase, getHabitsUseCase, getHabitProgressUseCase,
+    )
+
     @Test
     fun `dashboard reflects the latest weight after registering 79kg over an initial 80kg`() = runTest {
         val birthDate = LocalDate.now().minusYears(30)
-        val viewModel = DashboardViewModel(getUserProfileUseCase, getLatestWeightUseCase, getWeightTrendUseCase)
+        val viewModel = buildViewModel()
 
         userFlow.value = User(name = "Ana", birthDate = birthDate, heightCm = 165f, createdAt = Instant.now())
         weightFlow.value = WeightEntry(userId = User.SINGLE_USER_ID, weight = 80f, date = LocalDate.now())

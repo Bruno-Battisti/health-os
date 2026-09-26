@@ -25,6 +25,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.healthos.app.presentation.dashboard.DashboardScreen
 import com.healthos.app.presentation.evolution.EvolutionScreen
+import com.healthos.app.presentation.goal.GoalsScreen
+import com.healthos.app.presentation.habit.HabitsScreen
 import com.healthos.app.presentation.profile.OnboardingScreen
 import com.healthos.app.presentation.profile.ProfileScreen
 import com.healthos.app.presentation.weight.MeasurementScreen
@@ -36,6 +38,8 @@ private const val ROUTE_WEIGHT = "weight"
 private const val ROUTE_MEASUREMENTS = "measurements"
 private const val ROUTE_ACTIVE_WORKOUT = "workout"
 private const val ARG_WORKOUT_ID = "workoutId"
+private const val ROUTE_HABITS = "habits"
+private const val ROUTE_GOALS = "goals"
 
 @Composable
 fun HealthOsNavGraph(rootViewModel: RootViewModel = hiltViewModel()) {
@@ -85,7 +89,11 @@ private fun MainNavGraph() {
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(BottomNavItem.Today.route) {
-                DashboardScreen(onNavigateToWeight = { navController.navigate(ROUTE_WEIGHT) })
+                DashboardScreen(
+                    onNavigateToWeight = { navController.navigate(ROUTE_WEIGHT) },
+                    onNavigateToHabits = { navController.navigate(ROUTE_HABITS) },
+                    onNavigateToGoals = { navController.navigate(ROUTE_GOALS) },
+                )
             }
             composable(BottomNavItem.Workouts.route) {
                 WorkoutScreen(onOpenWorkout = { id -> navController.navigate("$ROUTE_ACTIVE_WORKOUT/$id") })
@@ -102,6 +110,8 @@ private fun MainNavGraph() {
             ) {
                 ActiveWorkoutScreen(onFinished = { navController.popBackStack() })
             }
+            composable(ROUTE_HABITS) { HabitsScreen() }
+            composable(ROUTE_GOALS) { GoalsScreen() }
         }
     }
 }

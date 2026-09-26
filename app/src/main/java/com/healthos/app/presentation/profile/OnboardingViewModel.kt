@@ -7,6 +7,7 @@ import com.healthos.app.domain.model.User
 import com.healthos.app.domain.usecase.CompleteOnboardingUseCase
 import com.healthos.app.domain.usecase.RecordInitialWeightUseCase
 import com.healthos.app.domain.usecase.SaveUserProfileUseCase
+import com.healthos.app.domain.usecase.SeedDefaultHabitsUseCase
 import com.healthos.app.domain.usecase.SetPersonalGoalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,7 @@ class OnboardingViewModel @Inject constructor(
     private val setPersonalGoalUseCase: SetPersonalGoalUseCase,
     private val recordInitialWeightUseCase: RecordInitialWeightUseCase,
     private val completeOnboardingUseCase: CompleteOnboardingUseCase,
+    private val seedDefaultHabitsUseCase: SeedDefaultHabitsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(OnboardingUiState())
@@ -82,6 +84,7 @@ class OnboardingViewModel @Inject constructor(
             )
             recordInitialWeightUseCase(initialWeight!!, LocalDate.now())
             setPersonalGoalUseCase(state.goal!!)
+            seedDefaultHabitsUseCase(User.SINGLE_USER_ID)
             completeOnboardingUseCase()
 
             _uiState.value = _uiState.value.copy(isSaving = false, isComplete = true)

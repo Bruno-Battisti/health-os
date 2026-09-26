@@ -6,6 +6,7 @@ import com.healthos.app.domain.model.PersonalGoal
 import com.healthos.app.domain.usecase.CompleteOnboardingUseCase
 import com.healthos.app.domain.usecase.RecordInitialWeightUseCase
 import com.healthos.app.domain.usecase.SaveUserProfileUseCase
+import com.healthos.app.domain.usecase.SeedDefaultHabitsUseCase
 import com.healthos.app.domain.usecase.SetPersonalGoalUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -30,12 +31,14 @@ class OnboardingViewModelTest {
     private val setPersonalGoalUseCase = mockk<SetPersonalGoalUseCase>()
     private val recordInitialWeightUseCase = mockk<RecordInitialWeightUseCase>()
     private val completeOnboardingUseCase = mockk<CompleteOnboardingUseCase>()
+    private val seedDefaultHabitsUseCase = mockk<SeedDefaultHabitsUseCase>()
 
     private val viewModel = OnboardingViewModel(
         saveUserProfileUseCase,
         setPersonalGoalUseCase,
         recordInitialWeightUseCase,
         completeOnboardingUseCase,
+        seedDefaultHabitsUseCase,
     )
 
     @Before
@@ -62,6 +65,7 @@ class OnboardingViewModelTest {
         coEvery { saveUserProfileUseCase(any()) } returns Unit
         coEvery { recordInitialWeightUseCase(any(), any()) } returns Unit
         coEvery { setPersonalGoalUseCase(any()) } returns Unit
+        coEvery { seedDefaultHabitsUseCase(any()) } returns Unit
         coEvery { completeOnboardingUseCase() } returns Unit
 
         viewModel.onNameChange("Ana")

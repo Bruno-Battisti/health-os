@@ -51,6 +51,9 @@ fun DashboardScreen(
                     modifier = Modifier.testTag("text_water_today"),
                 )
             }
+            uiState.steps?.let { steps ->
+                Text(text = "Passos hoje: $steps", modifier = Modifier.testTag("text_steps_today"))
+            }
             OutlinedButton(onClick = onNavigateToWeight, modifier = Modifier.testTag("button_quick_add_weight")) {
                 Text("Registrar peso")
             }

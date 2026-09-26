@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.healthos.app.domain.model.PersonalGoal
+import com.healthos.app.presentation.healthconnect.HealthConnectSection
 
 @Composable
 fun ProfileScreen(
@@ -82,6 +84,9 @@ fun ProfileScreen(
             ) {
                 Text("Salvar")
             }
+
+            HorizontalDivider()
+            HealthConnectSection()
         }
     }
 }

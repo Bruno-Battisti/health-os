@@ -6,9 +6,13 @@ import com.healthos.app.domain.model.User
 import com.healthos.app.domain.model.WeightEntry
 import com.healthos.app.domain.usecase.GetHabitProgressUseCase
 import com.healthos.app.domain.usecase.GetHabitsUseCase
+import com.healthos.app.domain.usecase.GetHealthConnectStatusUseCase
 import com.healthos.app.domain.usecase.GetLatestWeightUseCase
+import com.healthos.app.domain.usecase.GetTodayStepsUseCase
 import com.healthos.app.domain.usecase.GetUserProfileUseCase
 import com.healthos.app.domain.usecase.GetWeightTrendUseCase
+import com.healthos.app.domain.usecase.HealthConnectStatus
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +40,8 @@ class DashboardViewModelTest {
     private val getWeightTrendUseCase = mockk<GetWeightTrendUseCase>()
     private val getHabitsUseCase = mockk<GetHabitsUseCase>()
     private val getHabitProgressUseCase = mockk<GetHabitProgressUseCase>()
+    private val getHealthConnectStatusUseCase = mockk<GetHealthConnectStatusUseCase>()
+    private val getTodayStepsUseCase = mockk<GetTodayStepsUseCase>()
 
     @Before
     fun setUp() {
@@ -44,6 +50,11 @@ class DashboardViewModelTest {
         every { getLatestWeightUseCase(User.SINGLE_USER_ID) } returns weightFlow
         every { getWeightTrendUseCase(User.SINGLE_USER_ID, any()) } returns MutableStateFlow(null)
         every { getHabitsUseCase(User.SINGLE_USER_ID) } returns flowOf(emptyList())
+        coEvery { getHealthConnectStatusUseCase() } returns HealthConnectStatus(
+            isAvailable = false,
+            hasAllPermissions = false,
+            requiredPermissions = emptySet(),
+        )
     }
 
     @After
@@ -53,6 +64,7 @@ class DashboardViewModelTest {
 
     private fun buildViewModel() = DashboardViewModel(
         getUserProfileUseCase, getLatestWeightUseCase, getWeightTrendUseCase, getHabitsUseCase, getHabitProgressUseCase,
+        getHealthConnectStatusUseCase, getTodayStepsUseCase,
     )
 
     @Test

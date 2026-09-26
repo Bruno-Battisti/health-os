@@ -7,5 +7,6 @@ data class DashboardUiState(
     val weightDelta7Days: Float? = null,
     val waterToday: Float? = null,
     val waterTarget: Float? = null,
+    val steps: Long? = null,
     val isLoading: Boolean = true,
 )

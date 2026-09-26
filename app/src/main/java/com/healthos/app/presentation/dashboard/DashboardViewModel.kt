@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.healthos.app.domain.model.User
 import com.healthos.app.domain.usecase.GetHabitProgressUseCase
 import com.healthos.app.domain.usecase.GetHabitsUseCase
+import com.healthos.app.domain.usecase.GetHealthConnectStatusUseCase
 import com.healthos.app.domain.usecase.GetLatestWeightUseCase
+import com.healthos.app.domain.usecase.GetTodayStepsUseCase
 import com.healthos.app.domain.usecase.GetUserProfileUseCase
 import com.healthos.app.domain.usecase.GetWeightTrendUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -33,6 +36,8 @@ class DashboardViewModel @Inject constructor(
     getWeightTrendUseCase: GetWeightTrendUseCase,
     getHabitsUseCase: GetHabitsUseCase,
     getHabitProgressUseCase: GetHabitProgressUseCase,
+    getHealthConnectStatusUseCase: GetHealthConnectStatusUseCase,
+    getTodayStepsUseCase: GetTodayStepsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
@@ -45,13 +50,19 @@ class DashboardViewModel @Inject constructor(
         }
         val waterInfo = combine(waterHabit, waterToday) { habit, today -> (habit?.targetValue) to today }
 
+        val stepsFlow = flow {
+            val status = getHealthConnectStatusUseCase()
+            emit(if (status.hasAllPermissions) getTodayStepsUseCase() else null)
+        }
+
         viewModelScope.launch {
             combine(
                 getUserProfileUseCase(),
                 getLatestWeightUseCase(User.SINGLE_USER_ID),
                 getWeightTrendUseCase(User.SINGLE_USER_ID, SEVEN_DAYS),
                 waterInfo,
-            ) { user, latestWeight, trend7, water ->
+                stepsFlow,
+            ) { user, latestWeight, trend7, water, steps ->
                 DashboardUiState(
                     userName = user?.name,
                     userAge = user?.birthDate?.let { Period.between(it, LocalDate.now()).years },
@@ -59,6 +70,7 @@ class DashboardViewModel @Inject constructor(
                     weightDelta7Days = trend7?.deltaKg,
                     waterTarget = water.first,
                     waterToday = water.second,
+                    steps = steps,
                     isLoading = false,
                 )
             }.collect { _uiState.value = it }

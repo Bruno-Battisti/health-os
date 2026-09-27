@@ -27,6 +27,7 @@ private fun UserEntity.toDomain(): User = User(
     birthDate = LocalDate.ofEpochDay(birthDate),
     heightCm = height,
     createdAt = Instant.ofEpochMilli(createdAt),
+    updatedAt = Instant.ofEpochMilli(updatedAt),
 )
 
 private fun User.toEntity(): UserEntity = UserEntity(
@@ -35,4 +36,5 @@ private fun User.toEntity(): UserEntity = UserEntity(
     birthDate = birthDate.toEpochDay(),
     height = heightCm,
     createdAt = createdAt.toEpochMilli(),
+    updatedAt = updatedAt.toEpochMilli(),
 )

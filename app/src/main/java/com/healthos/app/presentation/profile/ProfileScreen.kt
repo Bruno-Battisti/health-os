@@ -25,6 +25,7 @@ import com.healthos.app.presentation.healthconnect.HealthConnectSection
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
+    onNavigateToAccount: () -> Unit = {},
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -87,6 +88,14 @@ fun ProfileScreen(
 
             HorizontalDivider()
             HealthConnectSection()
+
+            HorizontalDivider()
+            Button(
+                onClick = onNavigateToAccount,
+                modifier = Modifier.fillMaxWidth().testTag("button_account"),
+            ) {
+                Text("Conta / Nuvem")
+            }
         }
     }
 }

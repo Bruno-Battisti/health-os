@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug-only override: allows plaintext HTTP to the local dev backend (emulator loopback /
+     LAN) so the cloud sync feature can be exercised against a locally running server without
+     TLS. Release builds do not merge this file and keep the default HTTPS-only behavior. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application android:networkSecurityConfig="@xml/network_security_config_debug" />
+
+</manifest>

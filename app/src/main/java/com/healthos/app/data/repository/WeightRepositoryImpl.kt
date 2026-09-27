@@ -18,7 +18,7 @@ class WeightRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateEntry(entry: WeightEntry) {
-        weightDao.update(entry.toEntity())
+        weightDao.update(entry.copy(updatedAt = System.currentTimeMillis()).toEntity())
     }
 
     override suspend fun deleteEntry(id: Long) {
@@ -38,6 +38,8 @@ private fun WeightEntryEntity.toDomain(): WeightEntry = WeightEntry(
     weight = weight,
     date = LocalDate.ofEpochDay(date),
     note = note,
+    remoteId = remoteId,
+    updatedAt = updatedAt,
 )
 
 private fun WeightEntry.toEntity(): WeightEntryEntity = WeightEntryEntity(
@@ -46,4 +48,6 @@ private fun WeightEntry.toEntity(): WeightEntryEntity = WeightEntryEntity(
     weight = weight,
     date = date.toEpochDay(),
     note = note,
+    remoteId = remoteId,
+    updatedAt = updatedAt,
 )

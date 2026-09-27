@@ -48,6 +48,7 @@ class UserRepositoryImplTest {
             birthDate = LocalDate.of(1995, 4, 10),
             heightCm = 165f,
             createdAt = Instant.ofEpochSecond(1_700_000_000),
+            updatedAt = Instant.ofEpochSecond(1_700_000_000),
         )
 
         repository.saveUser(user)
@@ -63,6 +64,7 @@ class UserRepositoryImplTest {
             birthDate = LocalDate.of(1995, 4, 10),
             heightCm = 165f,
             createdAt = Instant.ofEpochSecond(1_700_000_000),
+            updatedAt = Instant.ofEpochSecond(1_700_000_000),
         )
         val updated = first.copy(name = "Ana Paula", heightCm = 166f)
 

@@ -8,6 +8,7 @@ data class User(
     val birthDate: LocalDate,
     val heightCm: Float,
     val createdAt: Instant,
+    val updatedAt: Instant = Instant.now(),
 ) {
     companion object {
         const val SINGLE_USER_ID = 1L

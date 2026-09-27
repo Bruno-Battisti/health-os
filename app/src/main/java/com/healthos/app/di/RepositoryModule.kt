@@ -1,18 +1,22 @@
 package com.healthos.app.di
 
 import com.healthos.app.data.preferences.UserPreferencesDataSource
+import com.healthos.app.data.repository.AuthRepositoryImpl
 import com.healthos.app.data.repository.GoalRepositoryImpl
 import com.healthos.app.data.repository.HabitRepositoryImpl
 import com.healthos.app.data.repository.HealthConnectRepositoryImpl
 import com.healthos.app.data.repository.MeasurementRepositoryImpl
+import com.healthos.app.data.repository.SyncRepositoryImpl
 import com.healthos.app.data.repository.UserRepositoryImpl
 import com.healthos.app.data.repository.WeightRepositoryImpl
 import com.healthos.app.data.repository.WorkoutRepositoryImpl
+import com.healthos.app.domain.repository.AuthRepository
 import com.healthos.app.domain.repository.GoalRepository
 import com.healthos.app.domain.repository.HabitRepository
 import com.healthos.app.domain.repository.HealthConnectRepository
 import com.healthos.app.domain.repository.MeasurementRepository
 import com.healthos.app.domain.repository.PreferencesRepository
+import com.healthos.app.domain.repository.SyncRepository
 import com.healthos.app.domain.repository.UserRepository
 import com.healthos.app.domain.repository.WeightRepository
 import com.healthos.app.domain.repository.WorkoutRepository
@@ -57,4 +61,12 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindHealthConnectRepository(impl: HealthConnectRepositoryImpl): HealthConnectRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSyncRepository(impl: SyncRepositoryImpl): SyncRepository
 }

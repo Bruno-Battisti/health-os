@@ -8,4 +8,6 @@ data class WeightEntry(
     val weight: Float,
     val date: LocalDate,
     val note: String? = null,
+    val remoteId: String? = null,
+    val updatedAt: Long = System.currentTimeMillis(),
 )

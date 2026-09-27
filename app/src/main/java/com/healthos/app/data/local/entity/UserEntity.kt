@@ -11,4 +11,6 @@ data class UserEntity(
     val birthDate: Long,
     val height: Float,
     val createdAt: Long,
+    // Cloud sync bookkeeping (etapa 0.7): drives last-write-wins conflict resolution.
+    val updatedAt: Long = System.currentTimeMillis(),
 )

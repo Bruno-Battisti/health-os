@@ -27,4 +27,13 @@ interface WeightDao {
 
     @Query("SELECT * FROM weight_entries WHERE userId = :userId AND date >= :sinceEpochDay ORDER BY date ASC")
     fun observeSince(userId: Long, sinceEpochDay: Long): Flow<List<WeightEntryEntity>>
+
+    @Query("SELECT * FROM weight_entries WHERE userId = :userId AND updatedAt > :since")
+    suspend fun getUpdatedSince(userId: Long, since: Long): List<WeightEntryEntity>
+
+    @Query("SELECT * FROM weight_entries WHERE remoteId = :remoteId LIMIT 1")
+    suspend fun findByRemoteId(remoteId: String): WeightEntryEntity?
+
+    @Query("UPDATE weight_entries SET remoteId = :remoteId WHERE id = :id")
+    suspend fun assignRemoteId(id: Long, remoteId: String)
 }

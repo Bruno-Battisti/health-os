@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
@@ -55,6 +56,20 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
+configurations.all {
+    resolutionStrategy {
+        // androidx.hilt:hilt-work pulls a newer com.google.dagger:hilt-android than the Hilt
+        // Gradle plugin version this project builds with, which breaks Hilt codegen
+        // (generated code calling APIs absent from the mismatched runtime). Keep every Dagger/
+        // Hilt artifact pinned to the plugin's version so codegen and runtime stay in lockstep.
+        force(
+            "com.google.dagger:dagger:${libs.versions.hilt.get()}",
+            "com.google.dagger:hilt-core:${libs.versions.hilt.get()}",
+            "com.google.dagger:hilt-android:${libs.versions.hilt.get()}",
+        )
+    }
+}
+
 kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_17)
@@ -62,6 +77,8 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":shared"))
+
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
@@ -89,6 +106,19 @@ dependencies {
     implementation(libs.datastore.preferences)
 
     implementation(libs.health.connect.client)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.auth)
+    implementation(libs.ktor.serialization.kotlinx.json)
+
+    implementation(libs.security.crypto)
+
+    implementation(libs.work.runtime.ktx)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.compiler.work)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

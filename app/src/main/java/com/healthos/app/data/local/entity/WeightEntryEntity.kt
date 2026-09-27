@@ -24,4 +24,7 @@ data class WeightEntryEntity(
     val weight: Float,
     val date: Long,
     val note: String? = null,
+    // Cloud sync bookkeeping (etapa 0.7): null until the entry has been pushed once.
+    val remoteId: String? = null,
+    val updatedAt: Long = System.currentTimeMillis(),
 )

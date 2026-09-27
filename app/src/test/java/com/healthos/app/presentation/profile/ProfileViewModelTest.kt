@@ -9,9 +9,9 @@ import com.healthos.app.domain.usecase.GetUserProfileUseCase
 import com.healthos.app.domain.usecase.SaveUserProfileUseCase
 import com.healthos.app.domain.usecase.SetPersonalGoalUseCase
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -69,8 +69,8 @@ class ProfileViewModelTest {
 
     @Test
     fun `save keeps the original createdAt and preserves the edited fields`() = runTest {
-        val expectedUser = User(name = "Ana Paula", birthDate = LocalDate.of(1995, 4, 10), heightCm = 166f, createdAt = createdAt)
-        coEvery { saveUserProfileUseCase(expectedUser) } returns Unit
+        val savedUser = slot<User>()
+        coEvery { saveUserProfileUseCase(capture(savedUser)) } returns Unit
         coEvery { setPersonalGoalUseCase(PersonalGoal.MAINTAIN_WEIGHT) } returns Unit
 
         val viewModel = buildViewModel()
@@ -80,6 +80,11 @@ class ProfileViewModelTest {
         viewModel.save()
 
         assertTrue(viewModel.uiState.value.saveSuccess)
-        coVerify(exactly = 1) { saveUserProfileUseCase(expectedUser) }
+        // updatedAt is stamped with the current time on save, so it can't be known ahead of the
+        // call; every other field is asserted exactly.
+        assertEquals(
+            User(name = "Ana Paula", birthDate = LocalDate.of(1995, 4, 10), heightCm = 166f, createdAt = createdAt, updatedAt = savedUser.captured.updatedAt),
+            savedUser.captured,
+        )
     }
 }

@@ -7,6 +7,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -21,12 +22,17 @@ class WeightEntryUseCasesTest {
     @Test
     fun `AddWeightEntryUseCase stores an entry for the single user`() = runTest {
         val date = LocalDate.of(2026, 1, 1)
-        val expected = WeightEntry(userId = User.SINGLE_USER_ID, weight = 80f, date = date, note = "manhã")
-        coEvery { repository.addEntry(expected) } returns Unit
+        val stored = slot<WeightEntry>()
+        coEvery { repository.addEntry(capture(stored)) } returns Unit
 
         AddWeightEntryUseCase(repository)(80f, date, "manhã")
 
-        coVerify(exactly = 1) { repository.addEntry(expected) }
+        // updatedAt is stamped with the current time by the entry's default, so it can't be
+        // known ahead of the call; every other field is asserted exactly.
+        assertEquals(
+            WeightEntry(userId = User.SINGLE_USER_ID, weight = 80f, date = date, note = "manhã", updatedAt = stored.captured.updatedAt),
+            stored.captured,
+        )
     }
 
     @Test

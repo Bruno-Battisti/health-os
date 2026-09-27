@@ -16,3 +16,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "HealthOS"
 include(":app")
+include(":server")
+include(":shared")

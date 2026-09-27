@@ -15,5 +15,7 @@
 local.properties
 /app/build
 /app/release
+/server/build
+/shared/build
 *.hprof
 .kotlin
